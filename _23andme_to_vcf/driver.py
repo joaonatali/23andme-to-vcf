@@ -1,4 +1,6 @@
 import argparse
+import gzip
+
 
 REQUIRED_VCF_HEADER_COLUMNS = (
     "CHROM",
@@ -81,7 +83,14 @@ def get_vcf_records(pos_list, fai, args):
                 yield (chrom, pos, rsid, ref, alts[0], '.', '.', '.', 'GT', '1')
 
 def load_23andme_data(input):
-    with open(input) as f:
+    if input.endswith('.gz'):
+        opener = gzip.open
+        mode = 'rt'
+    else:
+        opener = open
+        mode = 'r'
+
+    with opener(input, mode) as f:
         for line in f:
             if line.startswith('#'): continue
             if line.strip():
