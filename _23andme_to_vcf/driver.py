@@ -15,8 +15,8 @@ REQUIRED_VCF_HEADER_COLUMNS = (
 OPTIONAL_VCF_HEADER_COLUMNS = ("SAMPLE", )
 VCF_HEADER_COLUMNS = REQUIRED_VCF_HEADER_COLUMNS + OPTIONAL_VCF_HEADER_COLUMNS
 
-parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('--input', help='A 23andme data file', required=True)
+parser = argparse.ArgumentParser(description='Converts 23andMe data to VCF format')
+parser.add_argument('--input', help='A (optionally gzip compressed) 23andme data file', required=True)
 parser.add_argument('--output', help='Output VCF file', required=True)
 parser.add_argument('--fasta', help='An uncompressed reference genome GRCh37 fasta file', required=True)
 parser.add_argument('--fai', help='The fasta index for for the reference', required=True)
