@@ -17,7 +17,7 @@ VCF_HEADER_COLUMNS = REQUIRED_VCF_HEADER_COLUMNS + OPTIONAL_VCF_HEADER_COLUMNS
 
 parser = argparse.ArgumentParser(description='Converts 23andMe data to VCF format')
 parser.add_argument('--input', help='A (optionally gzip compressed) 23andme data file', required=True)
-parser.add_argument('--output', help='Output VCF file', required=True)
+parser.add_argument('--output', help='Output VCF file (optionally add a .gz extention to compress)', required=True)
 parser.add_argument('--fasta', help='An uncompressed reference genome GRCh37 fasta file', required=True)
 parser.add_argument('--fai', help='The fasta index for for the reference', required=True)
 
@@ -116,7 +116,14 @@ def write_vcf_header(f, vcf_header_columns=VCF_HEADER_COLUMNS):
 """.format(vcf_header_columns = "\t".join(vcf_header_columns)))
 
 def write_vcf(outfile, records):
-    with open(outfile, 'w') as f:
+    if outfile.endswith('.gz'):
+        opener = gzip.open
+        mode = 'wt'
+    else:
+        opener = open
+        mode = 'w'
+
+    with opener(outfile, mode) as f:
         write_vcf_header(f)
         for record in records:
             f.write('\t'.join(record) + '\n')
