@@ -64,7 +64,7 @@ def get_vcf_records(pos_list, fai, args):
             n_bases = pos % linebases
             n_bytes = start + n_lines * linewidth + n_bases
             f.seek(n_bytes)
-            ref = f.read(1)
+            ref = f.read(1).upper()
             alts = get_alts(ref, genotype)
             pos = str(pos + 1)
             diploid = len(genotype) == 2
