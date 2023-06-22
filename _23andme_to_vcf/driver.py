@@ -20,6 +20,8 @@ parser.add_argument('--input', help='A (optionally gzip compressed) 23andme data
 parser.add_argument('--output', help='Output VCF file (optionally add a .gz extention to compress)', required=True)
 parser.add_argument('--fasta', help='An uncompressed reference genome GRCh37 fasta file', required=True)
 parser.add_argument('--fai', help='The fasta index for for the reference', required=True)
+parser.add_argument('-m', '--mask', action='store_true', help='Respect soft-matching in reference genome (Default=False).', default=False, required=False)
+
 
 def load_fai(args):
     index = {}
@@ -64,7 +66,10 @@ def get_vcf_records(pos_list, fai, args):
             n_bases = pos % linebases
             n_bytes = start + n_lines * linewidth + n_bases
             f.seek(n_bytes)
-            ref = f.read(1).upper()
+            if args.mask:
+                ref = f.read(1)
+            else:
+                ref = f.read(1).upper()
             alts = get_alts(ref, genotype)
             pos = str(pos + 1)
             diploid = len(genotype) == 2
